@@ -123,12 +123,13 @@ DynamicScraper.prototype.clone = function() {
  *
  * @param  {!string=} url If provided makes an HTTP GET request to the
  *   given URL.
+ * @param  charset convert to UTF-8
  * @return {!ScraperPromise} Scraper promise, with a dynamic scraper.
  * @public
  * @static
  */
-DynamicScraper.create = function(url) {
-	return AbstractScraper.create(DynamicScraper, url);
+DynamicScraper.create = function(url, charset) {
+	return AbstractScraper.create(DynamicScraper, url, charset);
 };
 /**
  * Starts the factory. A factory should only be open once, and after

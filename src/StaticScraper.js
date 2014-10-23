@@ -73,12 +73,13 @@ StaticScraper.prototype.clone = function() {
  *
  * @param  {!string=} url If provided makes an HTTP GET request to the
  *   given URL.
+ * @param  charset convert to UTF-8
  * @return {!ScraperPromise} Scraper promise, with a static scraper.
  * @public
  * @static
  */
-StaticScraper.create = function(url) {
-	return AbstractScraper.create(StaticScraper, url);
+StaticScraper.create = function(url, charset) {
+	return AbstractScraper.create(StaticScraper, url, charset);
 };
 
 module.exports = StaticScraper;

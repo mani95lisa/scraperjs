@@ -1,5 +1,6 @@
 var request = require('request'),
-	ScraperPromise = require('./ScraperPromise');
+	ScraperPromise = require('./ScraperPromise'),
+    Iconv = require('iconv').Iconv;
 
 /**
  * An abstract scraper, this class should not be used directly as a
@@ -52,14 +53,20 @@ AbstractScraper.prototype = {
 	 * @return {!AbstractScraper} This scraper.
 	 * @public
 	 */
-	get: function(url, callback) {
+	get: function(url, charset, callback) {
 		var that = this;
-		request.get(url, function processGet(error, response, body) {
+		request({
+            url: url,
+            encoding: null
+        }, function processGet(error, response, body) {
 			if (error) {
 				callback(error);
 			} else {
 				that.response = response;
 				that.statusCode = response.statusCode;
+                if(charset){
+                    body = (new Iconv(charset,'UTF-8')).convert(new Buffer(body,'binary'));
+                }
 				that.body = body;
 				that.url = response.request.href;
 				that.loadBody(function(err) {
@@ -92,6 +99,9 @@ AbstractScraper.prototype = {
 			} else {
 				that.response = response;
 				that.statusCode = response.statusCode;
+                if(options.charset){
+                    body = (new Iconv(options.charset,'UTF-8')).convert(new Buffer(body,'binary'));
+                }
 				that.body = body;
 				that.url = response.request.href;
 				that.loadBody(function(err) {
@@ -182,14 +192,15 @@ AbstractScraper.prototype = {
  * @param  {!AbstractScraper} ScraperType Some concrete implementation
  *   of an abstract scraper.
  * @param  {!string=} url Url to make an HTTP GET request.
+ * @param  {!string=} charset Convert charset to UTF-8
  * @return {!ScraperPromise} A scraper promise.
  * @public
  * @static
  */
-AbstractScraper.create = function(ScraperType, url) {
+AbstractScraper.create = function(ScraperType, url, charset) {
 	var promise = new ScraperPromise(new ScraperType());
 	if (url) {
-		promise.get(url);
+		promise.get(url, charset);
 	}
 	return promise;
 };

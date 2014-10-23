@@ -222,9 +222,9 @@ ScraperPromise.prototype = {
 	 *   be made.
 	 * @public
 	 */
-	get: function(url) {
+	get: function(url, charset) {
 		var that = this;
-		this.scraper.get(url, function(err) {
+		this.scraper.get(url, charset, function(err) {
 			that._fire(err);
 		});
 		return this;
