@@ -65,7 +65,11 @@ AbstractScraper.prototype = {
 				that.response = response;
 				that.statusCode = response.statusCode;
                 if(charset){
-                    body = (new Iconv(charset,'UTF-8')).convert(new Buffer(body,'binary'));
+                    try{
+                        body = (new Iconv(charset,'UTF-8')).convert(new Buffer(body,'binary'));
+                    }catch(e){
+                        console.log(e);
+                    }
                 }
 				that.body = body;
 				that.url = response.request.href;
@@ -100,7 +104,11 @@ AbstractScraper.prototype = {
 				that.response = response;
 				that.statusCode = response.statusCode;
                 if(options.charset){
-                    body = (new Iconv(options.charset,'UTF-8')).convert(new Buffer(body,'binary'));
+                    try{
+                        body = (new Iconv(options.charset,'UTF-8')).convert(new Buffer(body,'binary'));
+                    }catch(e){
+                        console.log(e);
+                    }
                 }
 				that.body = body;
 				that.url = response.request.href;
